@@ -3,3 +3,5 @@ var GripCamera = {
         cordova.exec(success, failure, "GripCamera", "takePicture", [filename]);
     }
 };
+
+module.exports = GripCamera;
