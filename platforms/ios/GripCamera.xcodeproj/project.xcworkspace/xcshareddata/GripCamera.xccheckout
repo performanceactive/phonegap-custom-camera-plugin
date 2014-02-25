@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>5B95A5C4-88A2-4005-A642-F84D19BD9CDF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>GripCamera</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</key>
+		<string>ssh://gitlab.com/instil/grip-phonegap-camera-plugin.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>platforms/ios/GripCamera.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://gitlab.com/instil/grip-phonegap-camera-plugin.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GripCamera</string>
+		</dict>
+	</array>
+</dict>
+</plist>

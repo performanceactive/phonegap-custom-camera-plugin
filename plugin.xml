@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    id="com.performanceactive.gripcamera"
+    version="1.0">
+
+<name>Grip Camera</name>
+
+<js-module src="www/js/gripcamera.js" name="GripCamera">
+    <clobbers target="navigator.GripCamera" />
+</js-module>
+
+<engines>
+    <engine name="cordova" version=">=3.1.0" />
+</engines>
+
+<platform name="ios">
+    <config-file target="config.xml" parent="/*">
+        <feature name="GripCamera">
+            <param name="ios-package" value="GripCamera" />
+        </feature>
+    </config-file>
+    <header-file src="platforms/ios/GripCamera/Plugins/GripCamera.h" />
+    <header-file src="platforms/ios/GripCamera/Plugins/GripCameraViewController.h" />
+    <source-file src="platforms/ios/GripCamera/Plugins/GripCamera.m" />
+    <source-file src="platforms/ios/GripCamera/Plugins/GripCameraViewController.m" />
+    <!-- <resource-file src="platforms/ios/GripCamera/Classes/CustomCameraViewController.xib" /> -->
+
+</platform>
+
+</plugin>
