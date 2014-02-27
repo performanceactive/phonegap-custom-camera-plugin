@@ -50,5 +50,6 @@
     <access origin="http://127.0.0.1*" /> -->
     <feature name="GripCamera">
         <param name="ios-package" value="GripCamera" />
+        <param name="android-package" value="com.performanceactive.gripcamera.GripCamera"/>
     </feature>
 </widget>

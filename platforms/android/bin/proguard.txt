@@ -1,0 +1,6 @@
+# view AndroidManifest.xml #generated:15
+-keep class com.performanceactive.gripcamera.GripCameraActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:9
+-keep class com.performanceactive.gripcamera.MainActivity { <init>(...); }
+

@@ -10,8 +10,8 @@
     <engine name="cordova" version=">=3.1.0" />
 </engines>
 
-<js-module src="www/js/gripcamera.js" name="GripCamera">
-    <clobbers target="navigator.GripCamera" />
+<js-module src="www/js/gripcamera.js" name="gripCamera">
+    <clobbers target="navigator.gripCamera" />
 </js-module>
 
 <platform name="ios">
@@ -25,7 +25,6 @@
     <source-file src="platforms/ios/GripCamera/Plugins/GripCamera.m" />
     <source-file src="platforms/ios/GripCamera/Plugins/GripCameraViewController.m" />
     <framework src="AVFoundation.framework" />
-    <!-- <resource-file src="platforms/ios/GripCamera/Classes/CustomCameraViewController.xib" /> -->
 </platform>
 
 <platform name="android">
@@ -34,9 +33,17 @@
             <param name="android-package" value="com.performanceactive.gripcamera.GripCamera"/>
         </feature>
     </config-file>
-    <source-file src="src/com/performanceactive/gripcamera/GripCamera.java" target-dir="src/com/performanceactive/gripcamera" />      
-    <source-file src="src/com/performanceactive/gripcamera/GripCameraActivity.java" target-dir="src/com/performanceactive/gripcamera" />
-    <source-file src="src/com/performanceactive/gripcamera/GripCameraPreview.java" target-dir="src/com/performanceactive/gripcamera" />
+    <config-file target="AndroidManifest.xml" parent="/*">
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-feature android:name="android.hardware.camera" />
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <activity android:name="com.performanceactive.gripcamera.GripCameraActivity" android:screenOrientation="portrait">
+        </activity>
+    </config-file>
+    <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCamera.java" target-dir="src/com/performanceactive/gripcamera" />      
+    <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCameraActivity.java" target-dir="src/com/performanceactive/gripcamera" />
+    <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCameraPreview.java" target-dir="src/com/performanceactive/gripcamera" />
 </platform>
 
 </plugin>
