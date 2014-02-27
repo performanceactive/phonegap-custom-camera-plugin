@@ -20,8 +20,8 @@
     <uses-feature android:name="android.hardware.camera" />
     
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="14" />
 
     <application
         android:hardwareAccelerated="true"

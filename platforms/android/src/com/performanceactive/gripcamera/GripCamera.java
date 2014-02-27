@@ -10,8 +10,9 @@ import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONException;
 
-import static com.performanceactive.gripcamera.GripCameraActivity.IMAGE_URI;
+import static com.performanceactive.gripcamera.GripCameraActivity.ERROR_MESSAGE;
 import static com.performanceactive.gripcamera.GripCameraActivity.FILENAME;
+import static com.performanceactive.gripcamera.GripCameraActivity.IMAGE_URI;
 
 public class GripCamera extends CordovaPlugin {
 
@@ -19,10 +20,10 @@ public class GripCamera extends CordovaPlugin {
 
 	@Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
-//	    if (!hasRearFacingCamera()) {
-//	        callbackContext.error("No rear camera detected");
-//	        return false;
-//	    }
+	    if (!hasRearFacingCamera()) {
+	        callbackContext.error("No rear camera detected");
+	        return false;
+	    }
 	    this.callbackContext = callbackContext;
 	    Context context = cordova.getActivity().getApplicationContext();
 	    Intent intent = new Intent(context, GripCameraActivity.class);
@@ -41,7 +42,12 @@ public class GripCamera extends CordovaPlugin {
 	    if (resultCode == Activity.RESULT_OK) {
 	        callbackContext.success(intent.getExtras().getString(IMAGE_URI));
 	    } else {
-	        callbackContext.error("Failed to take picture");
+	        String errorMessage = intent.getExtras().getString(ERROR_MESSAGE);
+	        if (errorMessage != null) {
+	            callbackContext.error(errorMessage);
+	        } else {
+	            callbackContext.error("Failed to take picture");
+	        }
 	    }
     }
 

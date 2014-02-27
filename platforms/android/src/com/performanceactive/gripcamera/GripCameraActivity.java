@@ -25,6 +25,7 @@ public class GripCameraActivity extends Activity {
 
     public static String FILENAME = "Filename";
     public static String IMAGE_URI = "ImageUri";
+    public static String ERROR_MESSAGE = "ErrorMessage";
 
     private Camera camera;
 
@@ -54,10 +55,10 @@ public class GripCameraActivity extends Activity {
                 Intent data = new Intent();
                 data.putExtra(IMAGE_URI, Uri.fromFile(capturedImageFile).toString());
                 setResult(RESULT_OK, data);
+                finish();
             } catch (Exception e) {
-                setResult(RESULT_CANCELED);
+                finishWithError("Failed to save image");
             }
-            finish();
         }
     };
 
@@ -67,15 +68,24 @@ public class GripCameraActivity extends Activity {
         fos.close();
     }
 
+    private void finishWithError(String message) {
+        Intent data = new Intent().putExtra(ERROR_MESSAGE, message);
+        setResult(RESULT_CANCELED, data);
+        finish();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        camera = Camera.open(0);
+        try {
+            camera = Camera.open();
+        } catch (Exception e) {
+            finishWithError("Camera is not accessible");
+        }
         if (camera != null) {
             displayCameraPreview();
         } else {
-            setResult(RESULT_CANCELED);
-            finish();
+            finishWithError("Could not display camera preview");
         }
     }
 
