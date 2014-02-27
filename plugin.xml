@@ -20,11 +20,11 @@
             <param name="ios-package" value="GripCamera" />
         </feature>
     </config-file>
-    <header-file src="platforms/ios/GripCamera/Plugins/GripCamera.h" />
-    <header-file src="platforms/ios/GripCamera/Plugins/GripCameraViewController.h" />
-    <source-file src="platforms/ios/GripCamera/Plugins/GripCamera.m" />
-    <source-file src="platforms/ios/GripCamera/Plugins/GripCameraViewController.m" />
     <framework src="AVFoundation.framework" />
+    <header-file src="platforms/ios/GripCamera/Classes/GripCamera.h" />
+    <header-file src="platforms/ios/GripCamera/Classes/GripCameraViewController.h" />
+    <source-file src="platforms/ios/GripCamera/Classes/GripCamera.m" />
+    <source-file src="platforms/ios/GripCamera/Classes/GripCameraViewController.m" />
 </platform>
 
 <platform name="android">
