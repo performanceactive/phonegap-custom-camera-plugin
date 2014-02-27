@@ -27,7 +27,8 @@
             NSString* documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
             NSString* imagePath = [documentsDirectory stringByAppendingPathComponent:[command argumentAtIndex:0]];
             [imageData writeToFile:imagePath atomically:YES];
-            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:imagePath];
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                        messageAsString:[[NSURL fileURLWithPath:imagePath] absoluteString]];
             [self.commandDelegate sendPluginResult:result callbackId:_command.callbackId];
             [self.viewController dismissViewControllerAnimated:YES completion:nil];
         }];
