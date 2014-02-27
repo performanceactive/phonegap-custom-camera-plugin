@@ -26,7 +26,17 @@
     <source-file src="platforms/ios/GripCamera/Plugins/GripCameraViewController.m" />
     <framework src="AVFoundation.framework" />
     <!-- <resource-file src="platforms/ios/GripCamera/Classes/CustomCameraViewController.xib" /> -->
+</platform>
 
+<platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="GripCamera">
+            <param name="android-package" value="com.performanceactive.gripcamera.GripCamera"/>
+        </feature>
+    </config-file>
+    <source-file src="src/com/performanceactive/gripcamera/GripCamera.java" target-dir="src/com/performanceactive/gripcamera" />      
+    <source-file src="src/com/performanceactive/gripcamera/GripCameraActivity.java" target-dir="src/com/performanceactive/gripcamera" />
+    <source-file src="src/com/performanceactive/gripcamera/GripCameraPreview.java" target-dir="src/com/performanceactive/gripcamera" />
 </platform>
 
 </plugin>
