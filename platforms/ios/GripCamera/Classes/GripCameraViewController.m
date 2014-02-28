@@ -130,6 +130,20 @@ static const CGFloat kVerticalInset = 30;
     });
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 - (void)enableButtonIfCameraIsInFocus {
     if (_rearCamera.adjustingFocus) {
         _captureButton.enabled = NO;
