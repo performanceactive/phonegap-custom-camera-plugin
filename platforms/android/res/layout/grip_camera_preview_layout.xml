@@ -11,7 +11,7 @@
         />
 
     <ImageView 
-        android:src="@drawable/guide_top_left"
+        android:id="@+id/guide_top_left"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_width="50dp"
@@ -21,7 +21,7 @@
         />
     
     <ImageView 
-        android:src="@drawable/guide_top_right"
+        android:id="@+id/guide_top_right"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_width="50dp"
@@ -31,7 +31,7 @@
         />
     
     <ImageView 
-        android:src="@drawable/guide_bottom_left"
+        android:id="@+id/guide_bottom_left"
         android:layout_above="@+id/capture_button"
         android:layout_alignParentLeft="true"
         android:layout_width="50dp"
@@ -40,7 +40,7 @@
         />
     
     <ImageView 
-        android:src="@drawable/guide_bottom_right"
+        android:id="@+id/guide_bottom_right"
         android:layout_above="@+id/capture_button"
         android:layout_alignParentRight="true"
         android:layout_width="50dp"
@@ -57,7 +57,6 @@
         android:layout_marginBottom="10dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@drawable/capture_icon" 
         />
 
 </RelativeLayout>

@@ -44,6 +44,9 @@
     <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCamera.java" target-dir="src/com/performanceactive/gripcamera" />      
     <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCameraActivity.java" target-dir="src/com/performanceactive/gripcamera" />
     <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCameraPreview.java" target-dir="src/com/performanceactive/gripcamera" />
+    <source-file src="platforms/android/res/layout/grip_camera_preview_layout.xml" target-dir="res/layout" />
+    <source-file src="platforms/android/res/layout-large/grip_camera_preview_layout.xml" target-dir="res/layout-large" />
+    <source-file src="platforms/android/res/layout-xlarge/grip_camera_preview_layout.xml" target-dir="res/layout-xlarge" />
 </platform>
 
 </plugin>

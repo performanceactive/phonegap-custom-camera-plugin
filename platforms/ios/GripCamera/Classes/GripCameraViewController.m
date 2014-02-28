@@ -73,25 +73,25 @@ static const CGFloat kVerticalInset = 30;
     [_captureButton addTarget:self action:@selector(takePicture) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_captureButton];
     
-    UIImageView *topLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/camera/guide_top_left.png"]];
+    UIImageView *topLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_top_left.png"]];
     topLeftGuide.frame = CGRectMake(kHorizontalInset, kVerticalInset, kGuideWidth, kGuideHeight);
     [overlay addSubview:topLeftGuide];
     
-    UIImageView *topRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/camera/guide_top_right.png"]];
+    UIImageView *topRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_top_right.png"]];
     topRightGuide.frame = CGRectMake(overlay.frame.size.width - kGuideWidth - kHorizontalInset,
                                      kVerticalInset,
                                      kGuideWidth,
                                      kGuideHeight);
     [overlay addSubview:topRightGuide];
     
-    UIImageView *bottomLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/camera/guide_bottom_left.png"]];
+    UIImageView *bottomLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_bottom_left.png"]];
     bottomLeftGuide.frame = CGRectMake(kHorizontalInset,
                                        CGRectGetMinY(_captureButton.frame) - kGuideHeight,
                                        kGuideWidth,
                                        kGuideHeight);
     [overlay addSubview:bottomLeftGuide];
     
-    UIImageView *bottomRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/camera/guide_bottom_right.png"]];
+    UIImageView *bottomRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_bottom_right.png"]];
     bottomRightGuide.frame = CGRectMake(overlay.frame.size.width - kGuideWidth - kHorizontalInset,
                                         CGRectGetMinY(_captureButton.frame) - kGuideHeight,
                                         kGuideWidth,
@@ -134,10 +134,10 @@ static const CGFloat kVerticalInset = 30;
     if (_rearCamera.adjustingFocus) {
         _captureButton.enabled = NO;
         
-        [_captureButton setImage:[UIImage imageNamed:@"www/images/camera/camera_disabled_icon.png"] forState:UIControlStateNormal];
+        [_captureButton setImage:[UIImage imageNamed:@"www/images/cameraoverlay/camera_disabled_icon.png"] forState:UIControlStateNormal];
     } else {
         _captureButton.enabled = YES;
-        [_captureButton setImage:[UIImage imageNamed:@"www/images/camera/camera_enabled_icon.png"] forState:UIControlStateNormal];
+        [_captureButton setImage:[UIImage imageNamed:@"www/images/cameraoverlay/camera_enabled_icon.png"] forState:UIControlStateNormal];
     }
 }
 

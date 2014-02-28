@@ -22,18 +22,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int black_overlay=0x7f050000;
     }
     public static final class drawable {
-        public static final int camera_disabled_icon=0x7f020000;
-        public static final int camera_enabled_icon=0x7f020001;
-        public static final int capture_icon=0x7f020002;
-        public static final int guide_bottom_left=0x7f020003;
-        public static final int guide_bottom_right=0x7f020004;
-        public static final int guide_top_left=0x7f020005;
-        public static final int guide_top_right=0x7f020006;
-        public static final int icon=0x7f020007;
+        public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int capture_button=0x7f080001;
+        public static final int capture_button=0x7f080004;
         public static final int grip_camera_preview=0x7f080000;
+        public static final int guide_bottom_left=0x7f080003;
+        public static final int guide_bottom_right=0x7f080005;
+        public static final int guide_top_left=0x7f080001;
+        public static final int guide_top_right=0x7f080002;
     }
     public static final class layout {
         public static final int grip_camera_preview_layout=0x7f030000;
