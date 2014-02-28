@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +23,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static android.hardware.Camera.Parameters.FOCUS_MODE_AUTO;
+import static android.hardware.Camera.Parameters.FOCUS_MODE_MACRO;
 
 public class GripCameraActivity extends Activity {
 
@@ -42,12 +47,19 @@ public class GripCameraActivity extends Activity {
         setImageViewBitmap("guide_top_right", "guide_top_right.png");
         setImageViewBitmap("guide_bottom_left", "guide_bottom_left.png");
         setImageViewBitmap("guide_bottom_right", "guide_bottom_right.png");
-        setImageButtonBitmap("capture_button", "camera_enabled_icon.png");
+        setImageButtonBitmap("capture_button", "capture_button.png");
         ImageButton captureButton = (ImageButton)findViewById(getIdForUiElement("capture_button"));
+        captureButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                setCaptureButtonImageForEvent(event);
+                return false;
+            }
+        });
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                camera.takePicture(null, null, pictureCallback);
+                takePicture();
             }
         });
     }
@@ -58,7 +70,7 @@ public class GripCameraActivity extends Activity {
 
     private void setImageViewBitmap(String name, String imageName) {
         try {
-            InputStream imageStream = getAssets().open("www/images/cameraoverlay/" + imageName);
+            InputStream imageStream = getAssets().open("www/img/cameraoverlay/" + imageName);
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
             ImageView imageView = (ImageView)findViewById(getIdForUiElement(name));
             imageView.setImageBitmap(bitmap);
@@ -74,6 +86,28 @@ public class GripCameraActivity extends Activity {
 
     private int getIdForUiElement(String idAsString) {
         return getResources().getIdentifier(idAsString, "id", getCallingPackage());
+    }
+
+    private void setCaptureButtonImageForEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            setImageButtonBitmap("capture_button", "capture_button_pressed.png");
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            setImageButtonBitmap("capture_button", "capture_button.png");
+        }
+    }
+
+    private void takePicture() {
+        String focusMode = camera.getParameters().getFocusMode();
+        if (focusMode == FOCUS_MODE_AUTO || focusMode == FOCUS_MODE_MACRO) {
+            camera.autoFocus(new AutoFocusCallback() {
+                @Override
+                public void onAutoFocus(boolean success, Camera camera) {
+                    camera.takePicture(null, null, pictureCallback);
+                }
+            });
+        } else {
+            camera.takePicture(null, null, pictureCallback);
+        }
     }
 
     private final PictureCallback pictureCallback = new PictureCallback() {

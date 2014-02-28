@@ -38,16 +38,7 @@ static const CGFloat kVerticalInset = 30;
 }
 
 - (void)dealloc {
-    [_rearCamera removeObserver:self forKeyPath:@"adjustingFocus"];
     [_captureSession stopRunning];
-}
-
-- (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-    if ([keyPath isEqualToString:@"adjustingFocus"]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self enableButtonIfCameraIsInFocus];
-        });
-    }
 }
 
 - (void)loadView {
@@ -66,32 +57,34 @@ static const CGFloat kVerticalInset = 30;
 - (UIView*)createOverlay {
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _captureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_captureButton setImage:[UIImage imageNamed:@"www/img/cameraoverlay/capture_button.png"] forState:UIControlStateNormal];
+    [_captureButton setImage:[UIImage imageNamed:@"www/img/cameraoverlay/capture_button_pressed.png"] forState:UIControlStateHighlighted];
     _captureButton.frame = CGRectMake((overlay.frame.size.width / 2) - (kButtonWidth / 2),
                                       overlay.frame.size.height - kButtonHeight - 20,
                                       kButtonWidth,
                                       kButtonHeight);
-    [_captureButton addTarget:self action:@selector(takePicture) forControlEvents:UIControlEventTouchUpInside];
+    [_captureButton addTarget:self action:@selector(takePictureWaitingForCameraToFocus) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_captureButton];
     
-    UIImageView *topLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_top_left.png"]];
+    UIImageView *topLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/img/cameraoverlay/guide_top_left.png"]];
     topLeftGuide.frame = CGRectMake(kHorizontalInset, kVerticalInset, kGuideWidth, kGuideHeight);
     [overlay addSubview:topLeftGuide];
     
-    UIImageView *topRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_top_right.png"]];
+    UIImageView *topRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/img/cameraoverlay/guide_top_right.png"]];
     topRightGuide.frame = CGRectMake(overlay.frame.size.width - kGuideWidth - kHorizontalInset,
                                      kVerticalInset,
                                      kGuideWidth,
                                      kGuideHeight);
     [overlay addSubview:topRightGuide];
     
-    UIImageView *bottomLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_bottom_left.png"]];
+    UIImageView *bottomLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/img/cameraoverlay/guide_bottom_left.png"]];
     bottomLeftGuide.frame = CGRectMake(kHorizontalInset,
                                        CGRectGetMinY(_captureButton.frame) - kGuideHeight,
                                        kGuideWidth,
                                        kGuideHeight);
     [overlay addSubview:bottomLeftGuide];
     
-    UIImageView *bottomRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/images/cameraoverlay/guide_bottom_right.png"]];
+    UIImageView *bottomRightGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/img/cameraoverlay/guide_bottom_right.png"]];
     bottomRightGuide.frame = CGRectMake(overlay.frame.size.width - kGuideWidth - kHorizontalInset,
                                         CGRectGetMinY(_captureButton.frame) - kGuideHeight,
                                         kGuideWidth,
@@ -104,18 +97,8 @@ static const CGFloat kVerticalInset = 30;
 - (void)viewDidLoad {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         for (AVCaptureDevice *device in [AVCaptureDevice devices]) {
-            if ([device hasMediaType:AVMediaTypeVideo]) {
-                if ([device position] == AVCaptureDevicePositionBack) {
-                    _rearCamera = device;
-                    [_rearCamera lockForConfiguration:nil];
-                    if ([_rearCamera isTorchModeSupported:AVCaptureTorchModeAuto]) {
-                        _rearCamera.torchMode = AVCaptureTorchModeAuto;
-                    } else if ([_rearCamera isFlashModeSupported:AVCaptureFlashModeAuto]) {
-                        _rearCamera.flashMode = AVCaptureFlashModeAuto;
-                    }
-                    [_rearCamera unlockForConfiguration];
-                    [_rearCamera addObserver:self forKeyPath:@"adjustingFocus" options:NSKeyValueObservingOptionNew context:nil];
-                }
+            if ([device hasMediaType:AVMediaTypeVideo] && [device position] == AVCaptureDevicePositionBack) {
+                _rearCamera = device;
             }
         }
         AVCaptureDeviceInput *cameraInput = [AVCaptureDeviceInput deviceInputWithDevice:_rearCamera error:nil];
@@ -125,7 +108,6 @@ static const CGFloat kVerticalInset = 30;
         [_captureSession startRunning];
         dispatch_async(dispatch_get_main_queue(), ^{
             [_activityIndicator stopAnimating];
-            [self enableButtonIfCameraIsInFocus];
         });
     });
 }
@@ -144,14 +126,18 @@ static const CGFloat kVerticalInset = 30;
     return YES;
 }
 
-- (void)enableButtonIfCameraIsInFocus {
+- (void)takePictureWaitingForCameraToFocus {
     if (_rearCamera.adjustingFocus) {
-        _captureButton.enabled = NO;
-        
-        [_captureButton setImage:[UIImage imageNamed:@"www/images/cameraoverlay/camera_disabled_icon.png"] forState:UIControlStateNormal];
+        [_rearCamera addObserver:self forKeyPath:@"adjustingFocus" options:NSKeyValueObservingOptionNew context:nil];
     } else {
-        _captureButton.enabled = YES;
-        [_captureButton setImage:[UIImage imageNamed:@"www/images/cameraoverlay/camera_enabled_icon.png"] forState:UIControlStateNormal];
+        [self takePicture];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
+    if ([keyPath isEqualToString:@"adjustingFocus"] && !_rearCamera.adjustingFocus) {
+        [_rearCamera removeObserver:self forKeyPath:@"adjustingFocus"];
+        [self takePicture];
     }
 }
 
