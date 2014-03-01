@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.performanceactive.gripcamera"
+    id="com.performanceactive.plugins.camera"
     version="1.0">
 
-<name>Grip Camera</name>
+<name>Custom Camera</name>
 
 <engines>
-    <engine name="cordova" version=">=3.1.0" />
+    <engine name="cordova" version=">=3.3.0" />
 </engines>
 
-<js-module src="www/js/gripcamera.js" name="gripCamera">
-    <clobbers target="navigator.gripCamera" />
+<js-module src="www/js/customcamera.js" name="customCamera">
+    <clobbers target="navigator.customCamera" />
 </js-module>
 
 <platform name="ios">
     <config-file target="config.xml" parent="/*">
-        <feature name="GripCamera">
-            <param name="ios-package" value="GripCamera" />
+        <feature name="CustomCamera">
+            <param name="ios-package" value="CustomCamera" />
         </feature>
     </config-file>
     <framework src="AVFoundation.framework" />
-    <header-file src="platforms/ios/GripCamera/Classes/GripCamera.h" />
-    <header-file src="platforms/ios/GripCamera/Classes/GripCameraViewController.h" />
-    <source-file src="platforms/ios/GripCamera/Classes/GripCamera.m" />
-    <source-file src="platforms/ios/GripCamera/Classes/GripCameraViewController.m" />
+    <header-file src="platforms/ios/CustomCamera/Classes/CustomCamera.h" />
+    <header-file src="platforms/ios/CustomCamera/Classes/CustomCameraViewController.h" />
+    <source-file src="platforms/ios/CustomCamera/Classes/CustomCamera.m" />
+    <source-file src="platforms/ios/CustomCamera/Classes/CustomCameraViewController.m" />
 </platform>
 
 <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-        <feature name="GripCamera">
-            <param name="android-package" value="com.performanceactive.gripcamera.GripCamera"/>
+        <feature name="CustomCamera">
+            <param name="android-package" value="com.performanceactive.plugins.camera.CustomCamera"/>
         </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/*">
@@ -38,15 +38,15 @@
         <uses-feature android:name="android.hardware.camera" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        <activity android:name="com.performanceactive.gripcamera.GripCameraActivity" android:screenOrientation="portrait">
+        <activity android:name="com.performanceactive.plugins.camera.CustomCameraActivity" android:screenOrientation="portrait">
         </activity>
     </config-file>
-    <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCamera.java" target-dir="src/com/performanceactive/gripcamera" />      
-    <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCameraActivity.java" target-dir="src/com/performanceactive/gripcamera" />
-    <source-file src="platforms/android/src/com/performanceactive/gripcamera/GripCameraPreview.java" target-dir="src/com/performanceactive/gripcamera" />
-    <source-file src="platforms/android/res/layout/grip_camera_preview_layout.xml" target-dir="res/layout" />
-    <source-file src="platforms/android/res/layout-large/grip_camera_preview_layout.xml" target-dir="res/layout-large" />
-    <source-file src="platforms/android/res/layout-xlarge/grip_camera_preview_layout.xml" target-dir="res/layout-xlarge" />
+    <source-file src="platforms/android/src/com/performanceactive/plugins/camera/CustomCamera.java" target-dir="src/com/performanceactive/plugins/camera" />      
+    <source-file src="platforms/android/src/com/performanceactive/plugins/camera/CustomCameraActivity.java" target-dir="src/com/performanceactive/plugins/camera" />
+    <source-file src="platforms/android/src/com/performanceactive/plugins/camera/CustomCameraPreview.java" target-dir="src/com/performanceactive/plugins/camera" />
+    <source-file src="platforms/android/res/layout/custom_camera_preview_layout.xml" target-dir="res/layout" />
+    <source-file src="platforms/android/res/layout-large/custom_camera_preview_layout.xml" target-dir="res/layout-large" />
+    <source-file src="platforms/android/res/layout-xlarge/custom_camera_preview_layout.xml" target-dir="res/layout-xlarge" />
 </platform>
 
 </plugin>

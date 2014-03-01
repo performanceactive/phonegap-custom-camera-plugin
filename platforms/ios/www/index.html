@@ -34,10 +34,10 @@
                 <p class="event received">Device is Ready</p>
             </div>
             <button id="openCustomCameraBtn">Open Custom Camera</button>
-            <script src="js/gripcamera.js"></script>
+            <script src="js/customcamera.js"></script>
             <script>
             document.getElementById("openCustomCameraBtn").addEventListener("click", function() {
-                gripCamera.getPicture("latest_scan.png", function(imagePath) {
+                customCamera.getPicture("latest_scan.jpg", function(imagePath) {
                     alert("File path: " + imagePath);
                 }, function(error) {
                     alert(error);

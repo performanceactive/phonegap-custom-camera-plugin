@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.performanceactive.gripcamera" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>GripCamera</name>
+<widget id="com.performanceactive.plugins.camera" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>CustomCamera</name>
     <!-- <description>
         Hello World sample application that responds to the deviceready event.
     </description>
@@ -48,8 +48,8 @@
     <gap:splash gap:platform="ios" height="768" src="res/screen/ios/screen-ipad-landscape.png" width="1024" />
     <gap:splash gap:platform="winphone" src="res/screen/windows-phone/screen-portrait.jpg" />
     <access origin="http://127.0.0.1*" /> -->
-    <feature name="GripCamera">
-        <param name="ios-package" value="GripCamera" />
-        <param name="android-package" value="com.performanceactive.gripcamera.GripCamera"/>
+    <feature name="CustomCamera">
+        <param name="ios-package" value="CustomCamera" />
+        <param name="android-package" value="com.performanceactive.plugins.camera.CustomCamera"/>
     </feature>
 </widget>
