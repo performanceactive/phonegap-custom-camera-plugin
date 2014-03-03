@@ -25,6 +25,7 @@
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
     <name>CustomCamera</name>
+    <name>CustomCamera</name>
     <feature name="CustomCamera">
         <param name="ios-package" value="CustomCamera" />
         <param name="android-package" value="com.performanceactive.plugins.camera.CustomCamera" />

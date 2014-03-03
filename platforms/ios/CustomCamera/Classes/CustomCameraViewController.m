@@ -29,9 +29,10 @@ static const CGFloat kButtonHeight = 50;
 static const CGFloat kGuideWidth = 50;
 static const CGFloat kGuideHeight = 50;
 static const CGFloat kHorizontalInsetPhone = 15;
-static const CGFloat kVerticalInsetPhone = 30;
+static const CGFloat kVerticalInsetPhone = 60;
 static const CGFloat kHorizontalInsetTablet = 100;
-static const CGFloat kVerticalInsetTablet = 200;
+static const CGFloat kVerticalInsetTablet = 100;
+static const CGFloat kAspectRatio = 4.0f / 3;
 
 - (id)initWithCallback:(void(^)(UIImage*))callback {
     self = [super initWithNibName:nil bundle:nil];
@@ -39,7 +40,7 @@ static const CGFloat kVerticalInsetTablet = 200;
         _callback = callback;
         _captureSession = [[AVCaptureSession alloc] init];
         _captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
-    }
+    }\
     return self;
 }
 
@@ -105,15 +106,17 @@ static const CGFloat kVerticalInsetTablet = 200;
                                      kGuideWidth,
                                      kGuideHeight);
     
-    _bottomLeftGuide.frame = CGRectMake(kHorizontalInsetPhone,
-                                       CGRectGetMinY(_captureButton.frame) - kGuideHeight,
-                                       kGuideWidth,
-                                       kGuideHeight);
+    CGFloat height = (CGRectGetMinX(_topRightGuide.frame) - CGRectGetMinX(_topLeftGuide.frame)) * kAspectRatio;
     
-    _bottomRightGuide.frame = CGRectMake(bounds.size.width - kGuideWidth - kHorizontalInsetPhone,
-                                        CGRectGetMinY(_captureButton.frame) - kGuideHeight,
+    _bottomLeftGuide.frame = CGRectMake(CGRectGetMinX(_topLeftGuide.frame),
+                                        height,
                                         kGuideWidth,
                                         kGuideHeight);
+    
+    _bottomRightGuide.frame = CGRectMake(CGRectGetMinX(_topRightGuide.frame),
+                                         height,
+                                         kGuideWidth,
+                                         kGuideHeight);
 }
 
 - (void)layoutOverlayForTablet {
@@ -131,13 +134,15 @@ static const CGFloat kVerticalInsetTablet = 200;
                                       kGuideWidth,
                                       kGuideHeight);
     
-    _bottomLeftGuide.frame = CGRectMake(kHorizontalInsetTablet,
-                                        CGRectGetMinY(_captureButton.frame) - kGuideHeight,
+    CGFloat height = (CGRectGetMinX(_topRightGuide.frame) - CGRectGetMinX(_topLeftGuide.frame)) * kAspectRatio;
+    
+    _bottomLeftGuide.frame = CGRectMake(CGRectGetMinX(_topLeftGuide.frame),
+                                        height,
                                         kGuideWidth,
                                         kGuideHeight);
     
-    _bottomRightGuide.frame = CGRectMake(bounds.size.width - kGuideWidth - kHorizontalInsetTablet,
-                                         CGRectGetMinY(_captureButton.frame) - kGuideHeight,
+    _bottomRightGuide.frame = CGRectMake(CGRectGetMinX(_topRightGuide.frame),
+                                         height,
                                          kGuideWidth,
                                          kGuideHeight);
 }
