@@ -5,6 +5,7 @@
     version="1.0">
 
 <name>Custom Camera</name>
+<description>Custom Camera Plugin</description>
 
 <engines>
     <engine name="cordova" version=">=3.1.0" />
