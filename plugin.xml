@@ -38,7 +38,7 @@
         <uses-feature android:name="android.hardware.camera" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        <activity android:name="com.performanceactive.plugins.camera.CustomCameraActivity" android:screenOrientation="portrait">
+        <activity android:name="com.performanceactive.plugins.camera.CustomCameraActivity" android:screenOrientation="portrait" android:configChanges="orientation">
         </activity>
     </config-file>
     <source-file src="platforms/android/src/com/performanceactive/plugins/camera/CustomCamera.java" target-dir="src/com/performanceactive/plugins/camera" />      
