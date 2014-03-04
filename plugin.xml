@@ -44,9 +44,6 @@
     <source-file src="platforms/android/src/com/performanceactive/plugins/camera/CustomCamera.java" target-dir="src/com/performanceactive/plugins/camera" />      
     <source-file src="platforms/android/src/com/performanceactive/plugins/camera/CustomCameraActivity.java" target-dir="src/com/performanceactive/plugins/camera" />
     <source-file src="platforms/android/src/com/performanceactive/plugins/camera/CustomCameraPreview.java" target-dir="src/com/performanceactive/plugins/camera" />
-    <source-file src="platforms/android/res/layout/custom_camera_preview_layout.xml" target-dir="res/layout" />
-    <source-file src="platforms/android/res/layout-large/custom_camera_preview_layout.xml" target-dir="res/layout-large" />
-    <source-file src="platforms/android/res/layout-xlarge/custom_camera_preview_layout.xml" target-dir="res/layout-xlarge" />
 </platform>
 
 </plugin>

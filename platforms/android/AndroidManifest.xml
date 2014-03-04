@@ -12,7 +12,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.performanceactive.plugins.camera.CustomCameraActivity" android:screenOrientation="portrait">
+        <activity android:name="com.performanceactive.plugins.camera.CustomCameraActivity" android:screenOrientation="portrait" android:configChanges="orientation">
         </activity>
     </application>
 </manifest>
