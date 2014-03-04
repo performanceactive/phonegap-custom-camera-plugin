@@ -36,7 +36,7 @@ import static android.hardware.Camera.Parameters.FOCUS_MODE_MACRO;
 public class CustomCameraActivity extends Activity {
 
     private static final String TAG = CustomCameraActivity.class.getSimpleName();
-    private static final float ASPECT_RATIO = 4.0f / 3;
+    private static final float ASPECT_RATIO = 126.0f / 86;
 
     public static String FILENAME = "Filename";
     public static String QUALITY = "Quality";
@@ -77,22 +77,6 @@ public class CustomCameraActivity extends Activity {
         layout.addView(cameraPreviewView);
     }
 
-//  <ImageView
-//  android:layout_alignParentTop="true"
-//  android:layout_alignParentLeft="true"
-//  android:layout_marginTop="10dp"
-//  android:layout_marginLeft="10dp"
-//  />
-//
-//<ImageView
-//  android:layout_alignParentTop="true"
-//  android:layout_alignParentRight="true"
-//  android:layout_width="50dp"
-//  android:layout_height="50dp"
-//  android:layout_marginTop="10dp"
-//  android:layout_marginRight="10dp"
-//  />
-
     private void createTopLeftBorder() {
         borderTopLeft = new ImageView(this);
         setBitmap(borderTopLeft, "border_top_left.png");
@@ -100,11 +84,11 @@ public class CustomCameraActivity extends Activity {
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         if (isXLargeScreen()) {
-            layoutParams.topMargin = dpToPixels(200);
-            layoutParams.leftMargin = dpToPixels(200);
-        } else if (isLargeScreen()) {
             layoutParams.topMargin = dpToPixels(100);
             layoutParams.leftMargin = dpToPixels(100);
+        } else if (isLargeScreen()) {
+            layoutParams.topMargin = dpToPixels(50);
+            layoutParams.leftMargin = dpToPixels(50);
         } else {
             layoutParams.topMargin = dpToPixels(10);
             layoutParams.leftMargin = dpToPixels(10);
@@ -120,11 +104,11 @@ public class CustomCameraActivity extends Activity {
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         if (isXLargeScreen()) {
-            layoutParams.topMargin = dpToPixels(200);
-            layoutParams.rightMargin = dpToPixels(200);
-        } else if (isLargeScreen()) {
             layoutParams.topMargin = dpToPixels(100);
             layoutParams.rightMargin = dpToPixels(100);
+        } else if (isLargeScreen()) {
+            layoutParams.topMargin = dpToPixels(50);
+            layoutParams.rightMargin = dpToPixels(50);
         } else {
             layoutParams.topMargin = dpToPixels(10);
             layoutParams.rightMargin = dpToPixels(10);
@@ -140,9 +124,9 @@ public class CustomCameraActivity extends Activity {
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         if (isXLargeScreen()) {
-            layoutParams.leftMargin = dpToPixels(200);
-        } else if (isLargeScreen()) {
             layoutParams.leftMargin = dpToPixels(100);
+        } else if (isLargeScreen()) {
+            layoutParams.leftMargin = dpToPixels(50);
         } else {
             layoutParams.leftMargin = dpToPixels(10);
         }
@@ -157,9 +141,9 @@ public class CustomCameraActivity extends Activity {
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         if (isXLargeScreen()) {
-            layoutParams.rightMargin = dpToPixels(200);
-        } else if (isLargeScreen()) {
             layoutParams.rightMargin = dpToPixels(100);
+        } else if (isLargeScreen()) {
+            layoutParams.rightMargin = dpToPixels(50);
         } else {
             layoutParams.rightMargin = dpToPixels(10);
         }
@@ -196,7 +180,7 @@ public class CustomCameraActivity extends Activity {
         setBitmap(captureButton, "capture_button.png");
         captureButton.setBackgroundColor(Color.TRANSPARENT);
         captureButton.setScaleType(ScaleType.FIT_CENTER);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(dpToPixels(50), dpToPixels(50));
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(dpToPixels(75), dpToPixels(75));
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         layoutParams.bottomMargin = dpToPixels(10);

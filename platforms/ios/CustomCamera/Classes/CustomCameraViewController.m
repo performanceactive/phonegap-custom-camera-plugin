@@ -29,17 +29,16 @@ static const CGFloat kCaptureButtonHeightPhone = 50;
 static const CGFloat kBorderImageWidthPhone = 50;
 static const CGFloat kBorderImageHeightPhone = 50;
 static const CGFloat kHorizontalInsetPhone = 15;
-static const CGFloat kVerticalInsetPhone = 60;
+static const CGFloat kVerticalInsetPhone = 25;
 
-static const CGFloat kCaptureButtonWidthTablet = 50;
-static const CGFloat kCaptureButtonHeightTablet = 50;
+static const CGFloat kCaptureButtonWidthTablet = 75;
+static const CGFloat kCaptureButtonHeightTablet = 75;
 static const CGFloat kBorderImageWidthTablet = 50;
 static const CGFloat kBorderImageHeightTablet = 50;
 static const CGFloat kHorizontalInsetTablet = 100;
-static const CGFloat kVerticalInsetTablet = 100;
+static const CGFloat kVerticalInsetTablet = 50;
 
-static const CGFloat kAspectRatioPhone = 4.0f / 3;
-static const CGFloat kAspectRatioTablet = 4.0f / 3;
+static const CGFloat kAspectRatio = 125.0f / 86;
 
 - (id)initWithCallback:(void(^)(UIImage*))callback {
     self = [super initWithNibName:nil bundle:nil];
@@ -113,15 +112,15 @@ static const CGFloat kAspectRatioTablet = 4.0f / 3;
                                      kBorderImageWidthPhone,
                                      kBorderImageHeightPhone);
     
-    CGFloat height = (CGRectGetMaxX(_topRightGuide.frame) - CGRectGetMinX(_topLeftGuide.frame)) * kAspectRatioPhone;
+    CGFloat height = (CGRectGetMaxX(_topRightGuide.frame) - CGRectGetMinX(_topLeftGuide.frame)) * kAspectRatio;
     
     _bottomLeftGuide.frame = CGRectMake(CGRectGetMinX(_topLeftGuide.frame),
-                                        height - kBorderImageHeightPhone,
+                                        CGRectGetMinY(_topLeftGuide.frame) + height - kBorderImageHeightPhone,
                                         kBorderImageWidthPhone,
                                         kBorderImageHeightPhone);
     
     _bottomRightGuide.frame = CGRectMake(CGRectGetMinX(_topRightGuide.frame),
-                                         height - kBorderImageHeightPhone,
+                                         CGRectGetMinY(_topRightGuide.frame) + height - kBorderImageHeightPhone,
                                          kBorderImageWidthPhone,
                                          kBorderImageHeightPhone);
 }
@@ -141,15 +140,15 @@ static const CGFloat kAspectRatioTablet = 4.0f / 3;
                                       kBorderImageWidthTablet,
                                       kBorderImageHeightTablet);
     
-    CGFloat height = (CGRectGetMaxX(_topRightGuide.frame) - CGRectGetMinX(_topLeftGuide.frame)) * kAspectRatioTablet;
+    CGFloat height = (CGRectGetMaxX(_topRightGuide.frame) - CGRectGetMinX(_topLeftGuide.frame)) * kAspectRatio;
     
     _bottomLeftGuide.frame = CGRectMake(CGRectGetMinX(_topLeftGuide.frame),
-                                        height - kBorderImageHeightTablet,
+                                        CGRectGetMinY(_topLeftGuide.frame) + height - kBorderImageHeightTablet,
                                         kBorderImageWidthTablet,
                                         kBorderImageHeightTablet);
     
     _bottomRightGuide.frame = CGRectMake(CGRectGetMinX(_topRightGuide.frame),
-                                         height - kBorderImageHeightTablet,
+                                         CGRectGetMinY(_topRightGuide.frame) + height - kBorderImageHeightTablet,
                                          kBorderImageWidthTablet,
                                          kBorderImageHeightTablet);
 }
