@@ -4,8 +4,10 @@
     id="com.performanceactive.plugins.camera"
     version="1.0">
 
-<name>Custom Camera</name>
-<description>Custom Camera Plugin</description>
+    <name>Custom Camera</name>
+    <description>Custom Camera Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>custom,camera</keywords>
 
 <engines>
     <engine name="cordova" version=">=3.1.0" />
