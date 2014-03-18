@@ -32,13 +32,17 @@ public class CustomCameraPreview extends SurfaceView implements SurfaceHolder.Ca
             camera.setPreviewDisplay(holder);
             camera.startPreview();
         } catch (IOException e) {
-            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
+            Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        camera.stopPreview();
+        try {
+            camera.stopPreview();
+        } catch (Exception e) {
+            Log.d(TAG, "Error stopping camera preview: " + e.getMessage());
+        }
     }
 
     @Override

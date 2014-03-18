@@ -195,7 +195,7 @@ public class CustomCameraActivity extends Activity {
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePicture();
+                takePictureWithAutoFocus();
             }
         });
         layout.addView(captureButton);
@@ -209,17 +209,25 @@ public class CustomCameraActivity extends Activity {
         }
     }
 
-    private void takePicture() {
+    private void takePictureWithAutoFocus() {
         String focusMode = camera.getParameters().getFocusMode();
         if (focusMode == FOCUS_MODE_AUTO || focusMode == FOCUS_MODE_MACRO) {
             camera.autoFocus(new AutoFocusCallback() {
                 @Override
                 public void onAutoFocus(boolean success, Camera camera) {
-                    camera.takePicture(null, null, pictureCallback);
+                    takePicture();
                 }
             });
         } else {
+            takePicture();
+        }
+    }
+
+    private void takePicture() {
+        try {
             camera.takePicture(null, null, pictureCallback);
+        } catch (Exception e) {
+            finishWithError("Failed to take image");
         }
     }
 
@@ -280,6 +288,7 @@ public class CustomCameraActivity extends Activity {
         super.onStart();
         try {
             camera = Camera.open();
+            camera.setDisplayOrientation(90);
         } catch (Exception e) {
             finishWithError("Camera is not accessible");
         }
@@ -295,8 +304,8 @@ public class CustomCameraActivity extends Activity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         if (camera != null) {
             camera.release();
         }
