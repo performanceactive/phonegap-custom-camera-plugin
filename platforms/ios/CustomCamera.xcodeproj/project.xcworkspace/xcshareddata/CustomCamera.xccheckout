@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>DDDF0387-4633-47F9-88CD-F56EF8CC0704</string>
+	<string>3981D1A2-94EB-4CE9-AF0A-B7DD03A8600A</string>
 	<key>IDESourceControlProjectName</key>
 	<string>CustomCamera</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</key>
-		<string>ssh://gitlab.com/instil/grip-phonegap-camera-plugin.git</string>
+		<key>14F804C1-FAA8-43F6-86AD-74381C0D9E4A</key>
+		<string>ssh://github.com/performanceactive/phonegap-custom-camera-plugin.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>platforms/ios/CustomCamera.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</key>
+		<key>14F804C1-FAA8-43F6-86AD-74381C0D9E4A</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://gitlab.com/instil/grip-phonegap-camera-plugin.git</string>
+	<string>ssh://github.com/performanceactive/phonegap-custom-camera-plugin.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</string>
+	<string>14F804C1-FAA8-43F6-86AD-74381C0D9E4A</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>0F4D2760-AC9D-4FD9-AABE-B4BE41AAA464</string>
+			<string>14F804C1-FAA8-43F6-86AD-74381C0D9E4A</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CustomCamera</string>
 		</dict>

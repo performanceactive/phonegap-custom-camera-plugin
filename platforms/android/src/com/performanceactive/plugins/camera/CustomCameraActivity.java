@@ -40,6 +40,8 @@ public class CustomCameraActivity extends Activity {
 
     public static String FILENAME = "Filename";
     public static String QUALITY = "Quality";
+    public static String TARGET_WIDTH = "TargetWidth";
+    public static String TARGET_HEIGHT = "TargetHeight";
     public static String IMAGE_URI = "ImageUri";
     public static String ERROR_MESSAGE = "ErrorMessage";
 
@@ -239,7 +241,7 @@ public class CustomCameraActivity extends Activity {
                 String filename = getIntent().getStringExtra(FILENAME);
                 int quality = getIntent().getIntExtra(QUALITY, 80);
                 File capturedImageFile = new File(getCacheDir(), filename);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length);
+                Bitmap bitmap = getScaledBitmap(jpegData);
                 bitmap.compress(CompressFormat.JPEG, quality, new FileOutputStream(capturedImageFile));
                 Intent data = new Intent();
                 data.putExtra(IMAGE_URI, Uri.fromFile(capturedImageFile).toString());
@@ -250,6 +252,36 @@ public class CustomCameraActivity extends Activity {
             }
         }
     };
+
+    private Bitmap getScaledBitmap(byte[] jpegData) {
+        int targetWidth = getIntent().getIntExtra(TARGET_WIDTH, -1);
+        int targetHeight = getIntent().getIntExtra(TARGET_HEIGHT, -1);
+        if (targetWidth <= 0 && targetHeight <= 0) {
+            return BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length);
+        }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
+
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
+        return BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
+    }
+
+    private int calculateInSampleSize(BitmapFactory.Options options, int requestedWidth, int requestedHeight) {
+        int originalHeight = options.outHeight;
+        int originalWidth = options.outWidth;
+        int inSampleSize = 1;
+        if (originalHeight > requestedHeight || originalWidth > requestedWidth) {
+            int halfHeight = originalHeight / 2;
+            int halfWidth = originalWidth / 2;
+            while ((halfHeight / inSampleSize) > requestedHeight && (halfWidth / inSampleSize) > requestedWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
 
     private void finishWithError(String message) {
         Intent data = new Intent().putExtra(ERROR_MESSAGE, message);
