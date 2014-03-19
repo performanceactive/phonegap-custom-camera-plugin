@@ -36,11 +36,11 @@ navigator.customCamera.getPicture(filename, success, failure, [ options ]);
 
 ### Capture Options
 
-|         Option       |        Description        |
-| ----------------------- | --------------------------| 
-| quality | The compression level to use when saving the image - a value between 1 and 100, 100 meaning no reduction in quality. |
-| targetWidth | The target width of the scaled image, -1 to disable scaling. |
-| targetHeight | The target height of the scaled image, -1 to disable scaling. |
+|         Option       | Default Value |        Description        |
+|----------------------|---------------|---------------------------| 
+| quality | 80 | The compression level to use when saving the image - a value between 1 and 100, 100 meaning no reduction in quality. |
+| targetWidth | -1 | The target width of the scaled image, -1 to disable scaling. |
+| targetHeight | -1 | The target height of the scaled image, -1 to disable scaling.  |
 
 ### Example
 
