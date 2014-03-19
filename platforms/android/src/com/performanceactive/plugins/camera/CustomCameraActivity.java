@@ -260,13 +260,26 @@ public class CustomCameraActivity extends Activity {
             return BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length);
         }
 
+        // get dimensions of image without scaling
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
 
+        // decode image as close to requested scale as possible
         options.inJustDecodeBounds = false;
         options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
-        return BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
+
+        // set missing width/height based on aspect ratio
+        float aspectRatio = ((float)options.outHeight) / options.outWidth;
+        if (targetWidth > 0 && targetHeight <= 0) {
+            targetHeight = Math.round(targetWidth * aspectRatio);
+        } else if (targetWidth <= 0 && targetHeight > 0) {
+            targetWidth = Math.round(targetHeight / aspectRatio);
+        }
+
+        // return the requested scale
+        return Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
     }
 
     private int calculateInSampleSize(BitmapFactory.Options options, int requestedWidth, int requestedHeight) {
