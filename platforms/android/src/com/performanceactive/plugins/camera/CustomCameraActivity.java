@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -276,8 +277,9 @@ public class CustomCameraActivity extends Activity {
                 String filename = getIntent().getStringExtra(FILENAME);
                 int quality = getIntent().getIntExtra(QUALITY, 80);
                 File capturedImageFile = new File(getCacheDir(), filename);
-                Bitmap bitmap = getScaledBitmap(jpegData);
-                bitmap.compress(CompressFormat.JPEG, quality, new FileOutputStream(capturedImageFile));
+                Bitmap capturedImage = getScaledBitmap(jpegData);
+                capturedImage = correctCaptureImageOrientation(capturedImage);
+                capturedImage.compress(CompressFormat.JPEG, quality, new FileOutputStream(capturedImageFile));
                 Intent data = new Intent();
                 data.putExtra(IMAGE_URI, Uri.fromFile(capturedImageFile).toString());
                 setResult(RESULT_OK, data);
@@ -313,7 +315,9 @@ public class CustomCameraActivity extends Activity {
             targetWidth = Math.round(targetHeight / aspectRatio);
         }
 
-        // return the requested scale
+        // make sure we also
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
         return Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
     }
 
@@ -329,6 +333,12 @@ public class CustomCameraActivity extends Activity {
             }
         }
         return inSampleSize;
+    }
+
+    private Bitmap correctCaptureImageOrientation(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
     private void finishWithError(String message) {
