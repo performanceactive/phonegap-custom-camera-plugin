@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.hardware.Camera;
-import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,22 +62,24 @@ public class CustomCameraActivity extends Activity {
         super.onResume();
         try {
             camera = Camera.open();
-            Camera.Parameters cameraSettings = camera.getParameters();
-            cameraSettings.setJpegQuality(100);
-            List<String> supportedFocusModes = cameraSettings.getSupportedFocusModes();
-            if (supportedFocusModes.contains(FOCUS_MODE_CONTINUOUS_PICTURE)) {
-                cameraSettings.setFocusMode(FOCUS_MODE_CONTINUOUS_PICTURE);
-            } else
-                if (supportedFocusModes.contains(FOCUS_MODE_AUTO)) {
-                cameraSettings.setFocusMode(FOCUS_MODE_AUTO);
-            }
-            cameraSettings.setFlashMode(FLASH_MODE_OFF);
-            camera.setParameters(cameraSettings);
+            configureCamera();
+            displayCameraPreview();
         } catch (Exception e) {
             finishWithError("Camera is not accessible");
-            return;
         }
-        displayCameraPreview();
+    }
+
+    private void configureCamera() {
+        Camera.Parameters cameraSettings = camera.getParameters();
+        cameraSettings.setJpegQuality(100);
+        List<String> supportedFocusModes = cameraSettings.getSupportedFocusModes();
+        if (supportedFocusModes.contains(FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            cameraSettings.setFocusMode(FOCUS_MODE_CONTINUOUS_PICTURE);
+        } else if (supportedFocusModes.contains(FOCUS_MODE_AUTO)) {
+            cameraSettings.setFocusMode(FOCUS_MODE_AUTO);
+        }
+        cameraSettings.setFlashMode(FLASH_MODE_OFF);
+        camera.setParameters(cameraSettings);
     }
 
     private void displayCameraPreview() {
@@ -89,6 +90,10 @@ public class CustomCameraActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        releaseCamera();
+    }
+
+    private void releaseCamera() {
         if (camera != null) {
             camera.stopPreview();
             camera.release();
@@ -253,12 +258,16 @@ public class CustomCameraActivity extends Activity {
     }
 
     private void takePictureWithAutoFocus() {
-        camera.autoFocus(new AutoFocusCallback() {
-            @Override
-            public void onAutoFocus(boolean success, Camera camera) {
-                takePicture();
-            }
-        });
+//        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)) {
+//            camera.autoFocus(new AutoFocusCallback() {
+//                @Override
+//                public void onAutoFocus(boolean success, Camera camera) {
+//                    takePicture();
+//                }
+//            });
+//        } else {
+            takePicture();
+//        }
     }
 
     private void takePicture() {

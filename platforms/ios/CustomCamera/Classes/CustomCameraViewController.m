@@ -17,6 +17,7 @@
     AVCaptureDevice *_rearCamera;
     AVCaptureStillImageOutput *_stillImageOutput;
     UIButton *_captureButton;
+    UIButton *_backButton;
     UIImageView *_topLeftGuide;
     UIImageView *_topRightGuide;
     UIImageView *_bottomLeftGuide;
@@ -26,6 +27,8 @@
 
 static const CGFloat kCaptureButtonWidthPhone = 50;
 static const CGFloat kCaptureButtonHeightPhone = 50;
+static const CGFloat kBackButtonWidthPhone = 100;
+static const CGFloat kBackButtonHeightPhone = 40;
 static const CGFloat kBorderImageWidthPhone = 50;
 static const CGFloat kBorderImageHeightPhone = 50;
 static const CGFloat kHorizontalInsetPhone = 15;
@@ -33,6 +36,8 @@ static const CGFloat kVerticalInsetPhone = 25;
 
 static const CGFloat kCaptureButtonWidthTablet = 75;
 static const CGFloat kCaptureButtonHeightTablet = 75;
+static const CGFloat kBackButtonWidthTablet = 150;
+static const CGFloat kBackButtonHeightTablet = 50;
 static const CGFloat kBorderImageWidthTablet = 50;
 static const CGFloat kBorderImageHeightTablet = 50;
 static const CGFloat kHorizontalInsetTablet = 100;
@@ -82,6 +87,15 @@ static const CGFloat kAspectRatio = 125.0f / 86;
     [_captureButton addTarget:self action:@selector(takePictureWaitingForCameraToFocus) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_captureButton];
     
+    _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_backButton setBackgroundImage:[UIImage imageNamed:@"www/img/cameraoverlay/back_button.png"] forState:UIControlStateNormal];
+    [_backButton setBackgroundImage:[UIImage imageNamed:@"www/img/cameraoverlay/back_button_pressed.png"] forState:UIControlStateHighlighted];
+    [_backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [_backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[_backButton titleLabel] setFont:[UIFont systemFontOfSize:14]];
+    [_backButton addTarget:self action:@selector(dismissCameraPreview) forControlEvents:UIControlEventTouchUpInside];
+    [overlay addSubview:_backButton];
+    
     _topLeftGuide = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"www/img/cameraoverlay/border_top_left.png"]];
     [overlay addSubview:_topLeftGuide];
     
@@ -104,6 +118,11 @@ static const CGFloat kAspectRatio = 125.0f / 86;
                                       bounds.size.height - kCaptureButtonHeightPhone - 20,
                                       kCaptureButtonWidthPhone,
                                       kCaptureButtonHeightPhone);
+    
+    _backButton.frame = CGRectMake((CGRectGetMinX(_captureButton.frame) - kBackButtonWidthPhone) / 2,
+                                   CGRectGetMinY(_captureButton.frame) + ((kCaptureButtonHeightPhone - kBackButtonHeightPhone) / 2),
+                                   kBackButtonWidthPhone,
+                                   kBackButtonHeightPhone);
     
     _topLeftGuide.frame = CGRectMake(kHorizontalInsetPhone, kVerticalInsetPhone, kBorderImageWidthPhone, kBorderImageHeightPhone);
     
@@ -132,6 +151,11 @@ static const CGFloat kAspectRatio = 125.0f / 86;
                                       bounds.size.height - kCaptureButtonHeightTablet - 20,
                                       kCaptureButtonWidthTablet,
                                       kCaptureButtonHeightTablet);
+    
+    _backButton.frame = CGRectMake((CGRectGetMinX(_captureButton.frame) - kBackButtonWidthTablet) / 2,
+                                   CGRectGetMinY(_captureButton.frame) + ((kCaptureButtonHeightTablet - kBackButtonHeightTablet) / 2),
+                                   kBackButtonWidthTablet,
+                                   kBackButtonHeightTablet);
     
     _topLeftGuide.frame = CGRectMake(kHorizontalInsetTablet, kVerticalInsetTablet, kBorderImageWidthTablet, kBorderImageHeightTablet);
     
@@ -195,6 +219,10 @@ static const CGFloat kAspectRatio = 125.0f / 86;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation {
     return orientation == UIDeviceOrientationPortrait;
+}
+
+- (void)dismissCameraPreview {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)takePictureWaitingForCameraToFocus {
