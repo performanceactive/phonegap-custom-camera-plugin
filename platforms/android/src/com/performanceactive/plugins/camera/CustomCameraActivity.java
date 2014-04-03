@@ -3,6 +3,7 @@ package com.performanceactive.plugins.camera;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -31,7 +32,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import static android.hardware.Camera.Parameters.FOCUS_MODE_AUTO;
-import static android.hardware.Camera.Parameters.FOCUS_MODE_MACRO;
 
 public class CustomCameraActivity extends Activity {
 
@@ -212,8 +212,7 @@ public class CustomCameraActivity extends Activity {
     }
 
     private void takePictureWithAutoFocus() {
-        String focusMode = camera.getParameters().getFocusMode();
-        if (focusMode == FOCUS_MODE_AUTO || focusMode == FOCUS_MODE_MACRO) {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)) {
             camera.autoFocus(new AutoFocusCallback() {
                 @Override
                 public void onAutoFocus(boolean success, Camera camera) {
@@ -333,7 +332,11 @@ public class CustomCameraActivity extends Activity {
         super.onStart();
         try {
             camera = Camera.open();
-            camera.setDisplayOrientation(90);
+//            camera.setDisplayOrientation(90);
+            Camera.Parameters cameraSettings = camera.getParameters();
+            cameraSettings.setJpegQuality(100);
+            cameraSettings.setFocusMode(FOCUS_MODE_AUTO);
+            camera.setParameters(cameraSettings);
         } catch (Exception e) {
             finishWithError("Camera is not accessible");
         }
@@ -352,6 +355,7 @@ public class CustomCameraActivity extends Activity {
     protected void onPause() {
         super.onPause();
         if (camera != null) {
+            camera.stopPreview();
             camera.release();
         }
     }
