@@ -56,10 +56,10 @@ public class CustomCameraPreview extends SurfaceView implements SurfaceHolder.Ca
         }
 
         try {
-            Camera.Parameters parameters = camera.getParameters();
+            Camera.Parameters cameraSettings = camera.getParameters();
             Size previewSize = optimimalPreviewSize(width, height);
-            parameters.setPreviewSize(previewSize.width, previewSize.height);
-            camera.setParameters(parameters);
+            cameraSettings.setPreviewSize(previewSize.width, previewSize.height);
+            camera.setParameters(cameraSettings);
             camera.setPreviewDisplay(holder);
             camera.setDisplayOrientation(90);
             camera.startPreview();

@@ -3,7 +3,6 @@ package com.performanceactive.plugins.camera;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -30,8 +29,11 @@ import android.widget.RelativeLayout;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.List;
 
+import static android.hardware.Camera.Parameters.FLASH_MODE_OFF;
 import static android.hardware.Camera.Parameters.FOCUS_MODE_AUTO;
+import static android.hardware.Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE;
 
 public class CustomCameraActivity extends Activity {
 
@@ -44,6 +46,7 @@ public class CustomCameraActivity extends Activity {
     public static String TARGET_HEIGHT = "TargetHeight";
     public static String IMAGE_URI = "ImageUri";
     public static String ERROR_MESSAGE = "ErrorMessage";
+    public static int RESULT_ERROR = 2;
 
     private Camera camera;
     private RelativeLayout layout;
@@ -53,6 +56,43 @@ public class CustomCameraActivity extends Activity {
     private ImageView borderBottomLeft;
     private ImageView borderBottomRight;
     private ImageButton captureButton;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            camera = Camera.open();
+            Camera.Parameters cameraSettings = camera.getParameters();
+            cameraSettings.setJpegQuality(100);
+            List<String> supportedFocusModes = cameraSettings.getSupportedFocusModes();
+            if (supportedFocusModes.contains(FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                cameraSettings.setFocusMode(FOCUS_MODE_CONTINUOUS_PICTURE);
+            } else
+                if (supportedFocusModes.contains(FOCUS_MODE_AUTO)) {
+                cameraSettings.setFocusMode(FOCUS_MODE_AUTO);
+            }
+            cameraSettings.setFlashMode(FLASH_MODE_OFF);
+            camera.setParameters(cameraSettings);
+        } catch (Exception e) {
+            finishWithError("Camera is not accessible");
+            return;
+        }
+        displayCameraPreview();
+    }
+
+    private void displayCameraPreview() {
+        cameraPreviewView.removeAllViews();
+        cameraPreviewView.addView(new CustomCameraPreview(this, camera));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (camera != null) {
+            camera.stopPreview();
+            camera.release();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -212,16 +252,12 @@ public class CustomCameraActivity extends Activity {
     }
 
     private void takePictureWithAutoFocus() {
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)) {
-            camera.autoFocus(new AutoFocusCallback() {
-                @Override
-                public void onAutoFocus(boolean success, Camera camera) {
-                    takePicture();
-                }
-            });
-        } else {
-            takePicture();
-        }
+        camera.autoFocus(new AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                takePicture();
+            }
+        });
     }
 
     private void takePicture() {
@@ -297,7 +333,7 @@ public class CustomCameraActivity extends Activity {
 
     private void finishWithError(String message) {
         Intent data = new Intent().putExtra(ERROR_MESSAGE, message);
-        setResult(RESULT_CANCELED, data);
+        setResult(RESULT_ERROR, data);
         finish();
     }
 
@@ -324,39 +360,6 @@ public class CustomCameraActivity extends Activity {
             imageStream.close();
         } catch (Exception e) {
             Log.e(TAG, "Could load image", e);
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        try {
-            camera = Camera.open();
-//            camera.setDisplayOrientation(90);
-            Camera.Parameters cameraSettings = camera.getParameters();
-            cameraSettings.setJpegQuality(100);
-            cameraSettings.setFocusMode(FOCUS_MODE_AUTO);
-            camera.setParameters(cameraSettings);
-        } catch (Exception e) {
-            finishWithError("Camera is not accessible");
-        }
-        if (camera != null) {
-            displayCameraPreview();
-        } else {
-            finishWithError("Could not display camera preview");
-        }
-    }
-
-    private void displayCameraPreview() {
-        cameraPreviewView.addView(new CustomCameraPreview(this, camera));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (camera != null) {
-            camera.stopPreview();
-            camera.release();
         }
     }
 

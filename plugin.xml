@@ -38,8 +38,8 @@
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/*">
         <uses-permission android:name="android.permission.CAMERA" />
-        <uses-feature android:name="android.hardware.camera" />
-        <uses-feature android:name="android.hardware.camera.autofocus" />
+        <uses-feature android:name="android.hardware.camera" android:required="true" />
+        <uses-feature android:name="android.hardware.camera.autofocus" android:required="true" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
         <activity android:name="com.performanceactive.plugins.camera.CustomCameraActivity" android:screenOrientation="portrait" android:configChanges="orientation">

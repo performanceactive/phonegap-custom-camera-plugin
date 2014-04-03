@@ -14,6 +14,7 @@ import static com.performanceactive.plugins.camera.CustomCameraActivity.ERROR_ME
 import static com.performanceactive.plugins.camera.CustomCameraActivity.FILENAME;
 import static com.performanceactive.plugins.camera.CustomCameraActivity.IMAGE_URI;
 import static com.performanceactive.plugins.camera.CustomCameraActivity.QUALITY;
+import static com.performanceactive.plugins.camera.CustomCameraActivity.RESULT_ERROR;
 import static com.performanceactive.plugins.camera.CustomCameraActivity.TARGET_HEIGHT;
 import static com.performanceactive.plugins.camera.CustomCameraActivity.TARGET_WIDTH;
 
@@ -48,7 +49,7 @@ public class CustomCamera extends CordovaPlugin {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	    if (resultCode == Activity.RESULT_OK) {
 	        callbackContext.success(intent.getExtras().getString(IMAGE_URI));
-	    } else {
+	    } else if (resultCode == RESULT_ERROR) {
 	        String errorMessage = intent.getExtras().getString(ERROR_MESSAGE);
 	        if (errorMessage != null) {
 	            callbackContext.error(errorMessage);
