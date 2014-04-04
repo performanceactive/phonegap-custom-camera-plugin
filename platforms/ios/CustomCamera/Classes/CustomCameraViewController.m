@@ -16,6 +16,7 @@
     AVCaptureSession *_captureSession;
     AVCaptureDevice *_rearCamera;
     AVCaptureStillImageOutput *_stillImageOutput;
+    UIView *_buttonPanel;
     UIButton *_captureButton;
     UIButton *_backButton;
     UIImageView *_topLeftGuide;
@@ -33,6 +34,7 @@ static const CGFloat kBorderImageWidthPhone = 50;
 static const CGFloat kBorderImageHeightPhone = 50;
 static const CGFloat kHorizontalInsetPhone = 15;
 static const CGFloat kVerticalInsetPhone = 25;
+static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 static const CGFloat kCaptureButtonWidthTablet = 75;
 static const CGFloat kCaptureButtonHeightTablet = 75;
@@ -42,6 +44,7 @@ static const CGFloat kBorderImageWidthTablet = 50;
 static const CGFloat kBorderImageHeightTablet = 50;
 static const CGFloat kHorizontalInsetTablet = 100;
 static const CGFloat kVerticalInsetTablet = 50;
+static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 static const CGFloat kAspectRatio = 125.0f / 86;
 
@@ -67,11 +70,6 @@ static const CGFloat kAspectRatio = 125.0f / 86;
     previewLayer.frame = self.view.bounds;
     [[self.view layer] addSublayer:previewLayer];
     [self.view addSubview:[self createOverlay]];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self layoutOverlayForTablet];
-    } else {
-        [self layoutOverlayForPhone];
-    }
     _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     _activityIndicator.center = self.view.center;
     [self.view addSubview:_activityIndicator];
@@ -81,13 +79,17 @@ static const CGFloat kAspectRatio = 125.0f / 86;
 - (UIView*)createOverlay {
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    _buttonPanel = [[UIView alloc] initWithFrame:CGRectZero];
+    [_buttonPanel setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.75f]];
+    [overlay addSubview:_buttonPanel];
+    
     _captureButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_captureButton setImage:[UIImage imageNamed:@"www/img/cameraoverlay/capture_button.png"] forState:UIControlStateNormal];
     [_captureButton setImage:[UIImage imageNamed:@"www/img/cameraoverlay/capture_button_pressed.png"] forState:UIControlStateHighlighted];
     [_captureButton addTarget:self action:@selector(takePictureWaitingForCameraToFocus) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_captureButton];
     
-    _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_backButton setBackgroundImage:[UIImage imageNamed:@"www/img/cameraoverlay/back_button.png"] forState:UIControlStateNormal];
     [_backButton setBackgroundImage:[UIImage imageNamed:@"www/img/cameraoverlay/back_button_pressed.png"] forState:UIControlStateHighlighted];
     [_backButton setTitle:@"Cancel" forState:UIControlStateNormal];
@@ -111,11 +113,19 @@ static const CGFloat kAspectRatio = 125.0f / 86;
     return overlay;
 }
 
-- (void)layoutOverlayForPhone {
+- (void)viewWillLayoutSubviews {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self layoutForTablet];
+    } else {
+        [self layoutForPhone];
+    }
+}
+
+- (void)layoutForPhone {
     CGRect bounds = [[UIScreen mainScreen] bounds];
     
     _captureButton.frame = CGRectMake((bounds.size.width / 2) - (kCaptureButtonWidthPhone / 2),
-                                      bounds.size.height - kCaptureButtonHeightPhone - 10,
+                                      bounds.size.height - kCaptureButtonHeightPhone - kCaptureButtonVerticalInsetPhone,
                                       kCaptureButtonWidthPhone,
                                       kCaptureButtonHeightPhone);
     
@@ -124,12 +134,55 @@ static const CGFloat kAspectRatio = 125.0f / 86;
                                    kBackButtonWidthPhone,
                                    kBackButtonHeightPhone);
     
+    _buttonPanel.frame = CGRectMake(0,
+                                    CGRectGetMinY(_captureButton.frame) - kCaptureButtonVerticalInsetPhone,
+                                    bounds.size.width,
+                                    kCaptureButtonHeightPhone + (kCaptureButtonVerticalInsetPhone * 2));
+    
+    CGFloat screenAspectRatio = bounds.size.height / bounds.size.width;
+    if (screenAspectRatio <= 1.5f) {
+        [self layoutForPhoneWithShortScreen];
+    } else {
+        [self layoutForPhoneWithTallScreen];
+    }
+}
+
+- (void)layoutForPhoneWithShortScreen {
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    CGFloat verticalInset = 5;
+    CGFloat height = CGRectGetMinY(_buttonPanel.frame) - (verticalInset * 2);
+    CGFloat width = height / kAspectRatio;
+    CGFloat horizontalInset = (bounds.size.width - width) / 2;
+    
+    _topLeftGuide.frame = CGRectMake(horizontalInset,
+                                     verticalInset,
+                                     kBorderImageWidthPhone,
+                                     kBorderImageHeightPhone);
+    
+    _topRightGuide.frame = CGRectMake(bounds.size.width - kBorderImageWidthPhone - horizontalInset,
+                                      verticalInset,
+                                      kBorderImageWidthPhone,
+                                      kBorderImageHeightPhone);
+    
+    _bottomLeftGuide.frame = CGRectMake(CGRectGetMinX(_topLeftGuide.frame),
+                                        CGRectGetMinY(_topLeftGuide.frame) + height - kBorderImageHeightPhone,
+                                        kBorderImageWidthPhone,
+                                        kBorderImageHeightPhone);
+    
+    _bottomRightGuide.frame = CGRectMake(CGRectGetMinX(_topRightGuide.frame),
+                                         CGRectGetMinY(_topRightGuide.frame) + height - kBorderImageHeightPhone,
+                                         kBorderImageWidthPhone,
+                                         kBorderImageHeightPhone);
+}
+
+- (void)layoutForPhoneWithTallScreen {
+    CGRect bounds = [[UIScreen mainScreen] bounds];
     _topLeftGuide.frame = CGRectMake(kHorizontalInsetPhone, kVerticalInsetPhone, kBorderImageWidthPhone, kBorderImageHeightPhone);
     
     _topRightGuide.frame = CGRectMake(bounds.size.width - kBorderImageWidthPhone - kHorizontalInsetPhone,
-                                     kVerticalInsetPhone,
-                                     kBorderImageWidthPhone,
-                                     kBorderImageHeightPhone);
+                                      kVerticalInsetPhone,
+                                      kBorderImageWidthPhone,
+                                      kBorderImageHeightPhone);
     
     CGFloat height = (CGRectGetMaxX(_topRightGuide.frame) - CGRectGetMinX(_topLeftGuide.frame)) * kAspectRatio;
     
@@ -144,11 +197,11 @@ static const CGFloat kAspectRatio = 125.0f / 86;
                                          kBorderImageHeightPhone);
 }
 
-- (void)layoutOverlayForTablet {
+- (void)layoutForTablet {
     CGRect bounds = [[UIScreen mainScreen] bounds];
     
     _captureButton.frame = CGRectMake((bounds.size.width / 2) - (kCaptureButtonWidthTablet / 2),
-                                      bounds.size.height - kCaptureButtonHeightTablet - 20,
+                                      bounds.size.height - kCaptureButtonHeightTablet - kCaptureButtonVerticalInsetTablet,
                                       kCaptureButtonWidthTablet,
                                       kCaptureButtonHeightTablet);
     
@@ -156,6 +209,11 @@ static const CGFloat kAspectRatio = 125.0f / 86;
                                    CGRectGetMinY(_captureButton.frame) + ((kCaptureButtonHeightTablet - kBackButtonHeightTablet) / 2),
                                    kBackButtonWidthTablet,
                                    kBackButtonHeightTablet);
+    
+    _buttonPanel.frame = CGRectMake(0,
+                                    CGRectGetMinY(_captureButton.frame) - kCaptureButtonVerticalInsetTablet,
+                                    bounds.size.width,
+                                    kCaptureButtonHeightTablet + (kCaptureButtonVerticalInsetTablet * 2));
     
     _topLeftGuide.frame = CGRectMake(kHorizontalInsetTablet, kVerticalInsetTablet, kBorderImageWidthTablet, kBorderImageHeightTablet);
     
