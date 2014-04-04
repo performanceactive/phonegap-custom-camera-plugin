@@ -25,8 +25,8 @@
     UIActivityIndicatorView *_activityIndicator;
 }
 
-static const CGFloat kCaptureButtonWidthPhone = 50;
-static const CGFloat kCaptureButtonHeightPhone = 50;
+static const CGFloat kCaptureButtonWidthPhone = 64;
+static const CGFloat kCaptureButtonHeightPhone = 64;
 static const CGFloat kBackButtonWidthPhone = 100;
 static const CGFloat kBackButtonHeightPhone = 40;
 static const CGFloat kBorderImageWidthPhone = 50;
@@ -90,9 +90,9 @@ static const CGFloat kAspectRatio = 125.0f / 86;
     _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_backButton setBackgroundImage:[UIImage imageNamed:@"www/img/cameraoverlay/back_button.png"] forState:UIControlStateNormal];
     [_backButton setBackgroundImage:[UIImage imageNamed:@"www/img/cameraoverlay/back_button_pressed.png"] forState:UIControlStateHighlighted];
-    [_backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [_backButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [_backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [[_backButton titleLabel] setFont:[UIFont systemFontOfSize:14]];
+    [[_backButton titleLabel] setFont:[UIFont systemFontOfSize:18]];
     [_backButton addTarget:self action:@selector(dismissCameraPreview) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_backButton];
     
@@ -115,7 +115,7 @@ static const CGFloat kAspectRatio = 125.0f / 86;
     CGRect bounds = [[UIScreen mainScreen] bounds];
     
     _captureButton.frame = CGRectMake((bounds.size.width / 2) - (kCaptureButtonWidthPhone / 2),
-                                      bounds.size.height - kCaptureButtonHeightPhone - 20,
+                                      bounds.size.height - kCaptureButtonHeightPhone - 10,
                                       kCaptureButtonWidthPhone,
                                       kCaptureButtonHeightPhone);
     

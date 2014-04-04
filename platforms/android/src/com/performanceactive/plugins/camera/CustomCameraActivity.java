@@ -3,6 +3,7 @@ package com.performanceactive.plugins.camera;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -11,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -259,16 +261,16 @@ public class CustomCameraActivity extends Activity {
     }
 
     private void takePictureWithAutoFocus() {
-//        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)) {
-//            camera.autoFocus(new AutoFocusCallback() {
-//                @Override
-//                public void onAutoFocus(boolean success, Camera camera) {
-//                    takePicture();
-//                }
-//            });
-//        } else {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)) {
+            camera.autoFocus(new AutoFocusCallback() {
+                @Override
+                public void onAutoFocus(boolean success, Camera camera) {
+                    takePicture();
+                }
+            });
+        } else {
             takePicture();
-//        }
+        }
     }
 
     private void takePicture() {

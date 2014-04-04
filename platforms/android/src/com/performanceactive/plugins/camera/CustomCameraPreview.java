@@ -32,6 +32,7 @@ public class CustomCameraPreview extends SurfaceView implements SurfaceHolder.Ca
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         try {
+            // TODO: show activity indicator here, it can take almost 1 second to show the preview
             camera.setPreviewDisplay(holder);
             camera.startPreview();
         } catch (IOException e) {
