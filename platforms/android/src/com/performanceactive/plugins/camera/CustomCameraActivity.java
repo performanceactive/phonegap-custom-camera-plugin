@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -272,21 +273,26 @@ public class CustomCameraActivity extends Activity {
 
     private void takePicture() {
         try {
-            camera.takePicture(null, null, pictureCallback);
+            camera.takePicture(null, null, new PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] jpegData, Camera camera) {
+                    new OutputCapturedImageTask().execute(jpegData);
+                }
+            });
         } catch (Exception e) {
             finishWithError("Failed to take image");
         }
     }
 
-    private final PictureCallback pictureCallback = new PictureCallback() {
+    private class OutputCapturedImageTask extends AsyncTask<byte[], Void, Void> {
 
         @Override
-        public void onPictureTaken(byte[] jpegData, Camera camera) {
+        protected Void doInBackground(byte[]... jpegData) {
             try {
                 String filename = getIntent().getStringExtra(FILENAME);
                 int quality = getIntent().getIntExtra(QUALITY, 80);
                 File capturedImageFile = new File(getCacheDir(), filename);
-                Bitmap capturedImage = getScaledBitmap(jpegData);
+                Bitmap capturedImage = getScaledBitmap(jpegData[0]);
                 capturedImage = correctCaptureImageOrientation(capturedImage);
                 capturedImage.compress(CompressFormat.JPEG, quality, new FileOutputStream(capturedImageFile));
                 Intent data = new Intent();
@@ -296,8 +302,10 @@ public class CustomCameraActivity extends Activity {
             } catch (Exception e) {
                 finishWithError("Failed to save image");
             }
+            return null;
         }
-    };
+
+    }
 
     private Bitmap getScaledBitmap(byte[] jpegData) {
         int targetWidth = getIntent().getIntExtra(TARGET_WIDTH, -1);
