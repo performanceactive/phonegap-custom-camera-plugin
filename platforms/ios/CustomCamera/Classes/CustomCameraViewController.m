@@ -85,6 +85,7 @@ static const CGFloat kAspectRatio = 125.0f / 86;
     
     _captureButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_captureButton setImage:[UIImage imageNamed:@"www/img/cameraoverlay/capture_button.png"] forState:UIControlStateNormal];
+    [_captureButton setImage:[UIImage imageNamed:@"www/img/cameraoverlay/capture_button_pressed.png"] forState:UIControlStateSelected];
     [_captureButton setImage:[UIImage imageNamed:@"www/img/cameraoverlay/capture_button_pressed.png"] forState:UIControlStateHighlighted];
     [_captureButton addTarget:self action:@selector(takePictureWaitingForCameraToFocus) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_captureButton];
@@ -284,15 +285,37 @@ static const CGFloat kAspectRatio = 125.0f / 86;
 }
 
 - (void)takePictureWaitingForCameraToFocus {
-    if (_rearCamera.adjustingFocus) {
-        [_rearCamera addObserver:self forKeyPath:@"adjustingFocus" options:NSKeyValueObservingOptionNew context:nil];
+    _captureButton.userInteractionEnabled = NO;
+    _captureButton.selected = YES;
+    if (_rearCamera.focusPointOfInterestSupported && [_rearCamera isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+        [_rearCamera addObserver:self forKeyPath:@"adjustingFocus" options:(NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew) context:nil];
+        [self autoFocus];
+        [self autoExpose];
     } else {
         [self takePicture];
     }
 }
 
+- (void)autoFocus {
+    [_rearCamera lockForConfiguration:nil];
+    _rearCamera.focusMode = AVCaptureFocusModeAutoFocus;
+    _rearCamera.focusPointOfInterest = CGPointMake(0.5, 0.5);
+    [_rearCamera unlockForConfiguration];
+}
+
+- (void)autoExpose {
+    [_rearCamera lockForConfiguration:nil];
+    if (_rearCamera.exposurePointOfInterestSupported && [_rearCamera isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
+        _rearCamera.exposureMode = AVCaptureExposureModeAutoExpose;
+        _rearCamera.exposurePointOfInterest = CGPointMake(0.5, 0.5);
+    }
+    [_rearCamera unlockForConfiguration];
+}
+
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-    if ([keyPath isEqualToString:@"adjustingFocus"] && !_rearCamera.adjustingFocus) {
+    BOOL wasAdjustingFocus = [[change valueForKey:NSKeyValueChangeOldKey] boolValue];
+    BOOL isNowFocused = ![[change valueForKey:NSKeyValueChangeNewKey] boolValue];
+    if (wasAdjustingFocus && isNowFocused) {
         [_rearCamera removeObserver:self forKeyPath:@"adjustingFocus"];
         [self takePicture];
     }
