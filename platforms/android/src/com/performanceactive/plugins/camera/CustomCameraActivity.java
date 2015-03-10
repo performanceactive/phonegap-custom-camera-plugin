@@ -16,6 +16,7 @@ import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -215,15 +216,22 @@ public class CustomCameraActivity extends Activity {
     }
 
     private int screenWidthInPixels() {
-        Point size = new Point();
-        getWindowManager().getDefaultDisplay().getSize(size);
-        return size.x;
+        return getScreenSize().x;
     }
 
     private int screenHeightInPixels() {
-        Point size = new Point();
-        getWindowManager().getDefaultDisplay().getSize(size);
-        return size.y;
+        return getScreenSize().y;
+    }
+
+    private Point getScreenSize() {
+        Point point;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2){
+            point = new Point();
+            getWindowManager().getDefaultDisplay().getSize(point);
+        } else{
+            point = new Point(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight());
+        }
+        return point;
     }
 
     private void createCaptureButton() {
